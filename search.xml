@@ -4,11 +4,9 @@
     <title>Web安全学习总结——XSS漏洞概述</title>
     <url>/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<center>敦兮其若朴，旷兮其若谷</center>
-![preview.png](https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png)
 
+<p><img src="https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png" alt="preview.png"></p>
 <a id="more"></a>
-
-
 
 <h2 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h2><p>跨站脚本攻击-XSS（Cross Site Script），是指攻击者通过在Web页面中写入恶意脚本，造成用户在浏览页面时，控制用户浏览器进行操作的攻击方式。</p>
 <p>XSS攻击是Web攻击中最常见的攻击方法之一，它是通过对网页注入可执行代码且成功地被浏览器执行，达到攻击目的，形成了一次有效的XSS攻击。一旦攻击成功，它可以获取用户的联系人列表，然后向联系人发送虚假诈骗信息，可以删除用户的日志等等，有时候还和其他攻击方式同时实 施比如SQL注入攻击服务器和数据库、Click劫持、相对链接劫持等实施钓鱼，它带来的危害是巨 大的，是web安全的头号大敌。</p>
@@ -141,8 +139,8 @@
     <title>RingZer0-Reverse</title>
     <url>/2020/01/03/RingZer0-Reverse/</url>
     <content><![CDATA[<center>君子终日乾乾，夕惕若，厉无咎。</center>
-![origindal.png](https://i.loli.net/2020/02/09/4nt7wMxSp6mlBH9.png)
 
+<p><img src="https://i.loli.net/2020/02/09/4nt7wMxSp6mlBH9.png" alt="origindal.png"></p>
 <a id="more"></a>
 
 <p>这篇文章记录了RingZer0-Reverse破解记录。</p>
